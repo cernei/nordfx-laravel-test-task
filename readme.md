@@ -9,7 +9,11 @@
 Configuration assumes you have 8080 port available, otherwise you have to manually map container's port to available one on your machine in `docker.compose.yml` file
 
 4) Wait until all containers are built and started. Look at the logs.
-5) Naviate to `http://localhost:8080/install`
+5) Open another terminal tab. Go into php container using something like `docker exec -it nordfx-laravel-test-task-php-1 bash`
+6) Run inside php container `composer install`
+7) Run inside php container `chmod 777 -R resources`
+8) Run inside php container `chmod 777 -R storage`
+9) Naviate to `http://localhost:8080/install`. It should write "created" without errors.
 
 ### Setup
 
