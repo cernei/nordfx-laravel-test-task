@@ -21,16 +21,16 @@ class TicketsController
 
     public function showAddForm(Request $request, Response $response)
     {
-        $tickets = DB::table('tickets')->get()->toArray();
-        $result = [];
-        foreach($tickets as $ticket) {
-            $result[] = ['user_number' => $ticket->user_number];
-        }
+//        $tickets = DB::table('tickets')->get()->toArray();
+//        $result = [];
+//        foreach($tickets as $ticket) {
+//            $result[] = ['user_number' => $ticket->user_number];
+//        }
 
         $compiled = $this->smarty->fetch('add.tpl', [
             'csrf' => csrf_token(),
             'message' =>  $request->session()->pull('message'),
-            'myTickets' => $result
+//            'myTickets' => $result
         ]);
 
         return $response->setContent($compiled);
@@ -59,6 +59,7 @@ class TicketsController
                 $winningNumbers[mt_rand(1000000, 9999999)] = $winAmount;
             }
         }
+        // snippet for hardcode testing
 //        $winningNumbers = [
 //            '1234567' => 20000,
 //            '2234567' => 5000,
