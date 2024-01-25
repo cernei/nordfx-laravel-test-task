@@ -1,8 +1,5 @@
 {extends file='base.tpl'}
 {block name=body}
-    <h2>Total tickets: {$totalTicketCount}</h2>
-
-    <h2>Results:</h2>
+    <h1>Results for: {$draw_date}</h1>
     {include file='table.tpl'}
-
 {/block}

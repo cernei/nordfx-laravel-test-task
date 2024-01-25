@@ -87,11 +87,50 @@ class TicketsController
                 $result[$prize][$winningNumber] = $ticketsGroupedByNumber[$winningNumber]
                     ->pluck('username')->unique()->toArray();
             }
+            $now = now();
+            DB::table('results')->insert([
+                'draw_date' => $now,
+                'prize' => $prize,
+                'winning_number' => $winningNumber,
+                'winners' => implode('\n',  $result[$prize][$winningNumber] ?: []),
+            ]);
         }
 
         $compiled = $this->smarty->fetch('launch.tpl', [
             'winningTickets' => $result,
             'totalTicketCount' => $totalTicketCount
+        ]);
+
+        return $response->setContent($compiled);
+    }
+
+    public function results(Request $request, Response $response)
+    {
+        $draw = DB::table('results')
+            ->select(['draw_date'])
+            ->orderBy('draw_date', 'desc')
+            ->groupBy(['draw_date'])
+            ->first();
+        if ($draw) {
+            $tickets = DB::table('results')
+                ->where('draw_date' , '=', $draw->draw_date)
+                ->get();
+        }
+        $groups = $tickets->groupBy('prize');
+        $result = [];
+        foreach($groups as $prize => $group) {
+            $winningNumberGroups = $group->keyBy('winning_number')->toArray();
+            if (!isset($result[$prize])) {
+                $result[$prize] = [];
+            }
+            foreach ($winningNumberGroups as $number => $group2) {
+                $result[$prize][$number] = $group2->winners;
+            }
+        }
+
+        $compiled = $this->smarty->fetch('results.tpl', [
+            'draw_date' => $draw->draw_date,
+            'winningTickets' => $result,
         ]);
 
         return $response->setContent($compiled);

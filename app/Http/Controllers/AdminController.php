@@ -10,15 +10,24 @@ class AdminController
 {
     public function install(Response $response)
     {
-         DB::statement('DROP TABLE IF EXISTS tickets;');
-         DB::statement('
+        DB::statement('DROP TABLE IF EXISTS tickets;');
+        DB::statement('DROP TABLE IF EXISTS results;');
+        DB::statement('
             CREATE TABLE tickets (
              id INT AUTO_INCREMENT PRIMARY KEY,
              username VARCHAR(255),
              user_number INT
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 DEFAULT COLLATE utf8_unicode_ci;
         ');
-
+        DB::statement('
+            CREATE TABLE results (
+             id INT AUTO_INCREMENT PRIMARY KEY,
+             draw_date DATETIME,
+             prize INT,
+             winning_number INT,
+             winners TEXT
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 DEFAULT COLLATE utf8_unicode_ci;
+        ');
 
         return $response->setContent('Created');
     }

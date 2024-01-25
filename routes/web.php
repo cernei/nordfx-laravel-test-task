@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/add', [TicketsController::class, 'showAddForm'])->name('showTicket');
 Route::post('/add', [TicketsController::class , 'addTicket']);
 Route::get('/launch', [TicketsController::class , 'launch']);
+Route::get('/results', [TicketsController::class , 'results']);
 
 Route::get('/install', [AdminController::class , 'install']);
 Route::get('/add-test-case', [AdminController::class , 'addTestCase']);
