@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\TicketAddRequest;
 use App\Http\Services\SmartyService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -41,6 +42,7 @@ class TicketsController
         DB::table('tickets')->insert([
             'username' => $request->username,
             'user_number' => intval($request->user_number),
+            'date_bought' => now(),
         ]);
 
         $request->session()->flash('message', 'Ticket was added.');
@@ -48,7 +50,14 @@ class TicketsController
         return redirect()->route('showTicket');
     }
 
-    public function launch(Response $response)
+    public function start(Response $response)
+    {
+        $compiled = $this->smarty->fetch('start.tpl');
+
+        return $response->setContent($compiled);
+    }
+
+    public function launch(Request $request, Response $response)
     {
         $totalTicketCount = DB::table('tickets')->count();
 
@@ -73,6 +82,8 @@ class TicketsController
 //        ];
         $tickets = DB::table('tickets')
                     ->whereIn('user_number', array_keys($winningNumbers))
+                    ->where('date_bought' , '>=', $request->date_from)
+                    ->where('date_bought' , '<=', Carbon::parse($request->date_to)->endOfDay())
                     ->get();
 
         $ticketsGroupedByNumber = $tickets->groupBy('user_number');

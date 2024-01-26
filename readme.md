@@ -18,7 +18,8 @@ Configuration assumes you have 8080 port available, otherwise you have to manual
 ### Setup
 
  - `/install` - first endpoint you should navigate to install db, it also used to empty database when you want to retry test case 
- - `/add` - Page where you "buy" tickets.
+ - `/add` - User Page where you "buy" tickets.
+ - `/start` - Admin Page where lottery is initiated.
  - `/launch` - Admin Page where lottery draw happens.
- - `/results` User Page for last result
- - `/add-test-case` Import 1 million tickets for test app under load
+ - `/results` - User Page for last result
+ - `/add-test-case` - Import 1 million tickets for test app under load
